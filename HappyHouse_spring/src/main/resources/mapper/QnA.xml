@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.happyhouse.model.dao.QnADao">
+
+		<!-- List<Question> selectList(); -->
+		<select id="selectList" resultType="Question">
+			SELECT * FROM question
+		</select>
+		
+		<!-- //질문 쓰기
+		int insertQuestion(Question question) throws SQLException; -->
+		<insert id="insertQuestion" parameterType="question">
+			INSERT INTO question(title, content, userid) values(#{title}, #{content}, #{userId})
+		</insert>
+		
+		<!-- //답변 쓰기
+		int insertAnswer(Answer answer) throws SQLException; -->
+		<insert id="insertAnswer" parameterType="answer">
+			INSERT INTO answer(content, question_no) values(#{content}, #{question_no})
+		</insert>
+		
+		<!-- //질문 읽기(답변있으면 읽기)
+		Question selectQuestion(int no) throws SQLException; -->
+		<select id="selectQuestion" parameterType="int" resultType="question">
+			SELECT * FROM question where no = #{no}
+		</select>
+		
+		<!-- Answer selectAnswer(int question_no) throws SQLException; -->
+		<select id="selectAnswer" parameterType="int" resultType="answer">
+			SELECT * FROM answer where question_no = #{question_no}
+		</select>
+		
+		<!-- //질문 삭제
+		int deleteQuestion(int no) throws SQLException; -->
+		<delete id="deleteQuestion" parameterType="int">
+			DELETE FROM question
+			WHERE no = #{no}
+		</delete>
+		
+		<!-- //답변 삭제
+		int  deleteAnswer(int no) throws SQLException; -->
+		<delete id="deleteAnswer" parameterType="int">
+			delete from answer where no = #{no}
+		</delete>
+		
+		<!-- //질문 수정
+		int modifyQuestion(Question question) throws SQLException; -->
+		<update id="modifyQuestion" parameterType="question">
+			UPDATE question 
+			SET title = #{title}, content = #{content}
+			WHERE no = #{no}
+		</update>
+		
+		<!-- //답변 수정
+		int modifyAnswer(Answer answer) throws SQLException; -->
+		<update id="modifyAnswer" parameterType="answer">
+			UPDATE answer
+			SET content = #{content}
+			WHERE question_no = #{question_no}
+		</update>
+
+
+</mapper>

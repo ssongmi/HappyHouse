@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.happyhouse.model.dao.HouseDao">
+
+	<!-- 주소 검색 : 구, 동 -->
+	<select id="selectBaseAddress" parameterType="map"
+		resultType="BaseAddress">
+		select *
+		from baseaddress
+		where gugun = #{gu} and dong =
+		#{dong}
+	</select>
+
+	<!-- 거래가 검색 : 구, 동 -->
+	<select id="selectHouseDeal" parameterType="map"
+		resultType="HouseDeal">
+		SELECT hd.no, hd.dong, hd.AptName, hd.code, hd.dealAmount,
+		hd.buildYear, hd.dealYear, hd.dealMonth,
+		hd.dealDay, hd.area, hd.floor,
+		hd.jibun, hd.type, hd.rentMoney, hi.lat, hi.lng,
+		hi.img
+		FROM housedeal
+		hd
+		INNER JOIN houseinfo hi ON hd.AptName =
+		hi.AptName and hd.dong =
+		hi.dong
+		WHERE hd.code = #{code} and hd.dong =
+		#{dong}
+	</select>
+
+	<!-- Dto List를 만들어야 하나..? -->
+	<!-- 시 도 검색 -->
+	<select id="selectCity" resultType="String">
+		SELECT distinct city
+		FROM
+		baseaddress
+	</select>
+
+	<!-- 구 검색 -->
+	<select id="selectGu" parameterType="String" resultType="String">
+		SELECT
+		distinct gugun
+		FROM baseaddress
+		WHERE city = #{city}
+	</select>
+
+	<!-- 동 검색 -->
+	<select id="selectDong" parameterType="String"
+		resultType="String">
+		SELECT distinct dong
+		FROM baseaddress
+		WHERE gugun = #{gugun}
+	</select>
+
+	<select id="selectHouseInfo" parameterType="HouseInfo"
+		resultType="int">
+		SELECT no FROM houseinfo
+		WHERE code = #{code} AND dong =
+		#{dong} AND AptName = ${aptName} AND jibun = #{jibun}
+	</select>
+
+	<insert id="insertBookMark" parameterType="houseinfo">
+		INSERT INTO bookmark
+		values(#{userId}, #{no}, #{city}, #{gugun})
+	</insert>
+
+	<delete id="deleteBookMark" parameterType="houseinfo">
+		DELETE FROM bookmark
+		WHERE member_id = #{userId} and house_id = #{no} and gugun = #{gugun}
+	</delete>
+
+	<select id="selectBookMark" parameterType="String"
+		resultType="housedeal">
+		select * from housedeal h
+		inner join bookmark b on
+		b.house_id = h.no and b.member_id = #{userId};
+	</select>
+
+	<select id="selectTop10" resultType="houseinfo">
+		select * from housedeal h
+		inner join (select house_id, count(house_id) as c from bookmark
+		group by house_id
+		order by c desc
+		limit 10) b on b.house_id = h.no;
+	</select>
+
+</mapper>

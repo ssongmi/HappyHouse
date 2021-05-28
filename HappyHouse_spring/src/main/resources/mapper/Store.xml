@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.happyhouse.model.dao.StoreDao">
+
+	<!-- 게시판 등록 -->
+	<insert id="insertStore" parameterType="java.util.List">
+		insert into storeinfo
+		values
+		<foreach collection="list" item="item" separator=",">
+			(#{item.id},
+			#{item.storeName}, #{item.localName}, #{item.code1},
+			#{item.codeName1},
+			#{item.code2}, #{item.codeName2}, #{item.code3},
+			#{item.codeName3}, #{item.code4}, #{item.codeName4},
+			#{item.cityCode}, #{item.city}, #{item.guCode},
+			#{item.gu},
+			#{item.dongCode}, #{item.dong},
+			#{item.dongCode2},
+			#{item.dong2},
+			#{item.jibunAddress},
+			#{item.buildName},
+			#{item.address},
+			#{item.oldPostCode},
+			#{item.postCode},
+			#{item.lng},
+			#{item.lat})
+		</foreach>
+	</insert>
+
+
+</mapper>
